@@ -1,0 +1,99 @@
+21/08/25:
+This was first attempt :
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i=m-1, j=n-1;
+        int k = m+n-1;
+        if(nums1[0] == 0) nums1[0] = nums2[0];
+        while(i >= 0 && j >= 0){
+            if(nums1[i] > nums2[j]){
+                nums1[k] = nums1[i];
+                k--;
+                i--;
+            }
+            else if(nums1[i] < nums2[j]){
+                nums1[k] = nums2[j];
+                k--;
+                j--;
+            }
+            else{
+                nums1[k] = nums1[i];
+                k--;
+                nums1[k] = nums2[j];
+                k--;
+                i--;
+                j--;
+            }
+        }
+    }
+}
+
+if(nums1[0] == 0) nums1[0] = nums2[0]; for negative numbers, but this went wrong for other cases when nums1 had 0 at start, or multiple 0s at start
+
+then i added the code if some elements were left in case i or j reached 0 earlier than the other, :
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i=m-1, j=n-1;
+        int k = m+n-1;
+        if(nums1[0] == 0) nums1[0] = nums2[0];
+        while(i >= 0 && j >= 0){
+            if(nums1[i] > nums2[j]){
+                nums1[k] = nums1[i];
+                k--;
+                i--;
+            }
+            else if(nums1[i] < nums2[j]){
+                nums1[k] = nums2[j];
+                k--;
+                j--;
+            }
+            else{
+                nums1[k] = nums1[i];
+                k--;
+                nums1[k] = nums2[j];
+                k--;
+                i--;
+                j--;
+            }
+        }
+        while(i >= 0){
+            nums1[k] = nums1[i];
+                k--;
+                i--;
+        }
+        while(j >= 0){
+            nums1[k] = nums2[j];
+                k--;
+                j--;
+        }
+    }
+}
+
+, then again the if(nums1[0] == 0) nums1[0] = nums2[0]; was causing issues, so i removed it and boom it was passed
+
+update better solution, there's no need to check for leftover i, bcz the elements are already sorted, and the nums2 elements fit just right, if all elements of nums1 are smaller than nums2
+then nums2 elements are already at correct position, if there are some elements larger than nums2, then only those elements are affected and rest of nums1 remains sorted, so no i is ever left, 
+so while(i >=0) is unnecessary, so finally this also works(also adjusted the equal condition as the loop will work just fine):
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i=m-1, j=n-1;
+        int k = m+n-1;
+
+        while(i >= 0 && j >= 0){
+            if(nums1[i] > nums2[j]){
+                nums1[k--] = nums1[i--];
+            }
+            else if(nums1[i] < nums2[j]){
+                nums1[k--] = nums2[j--];
+            }
+            else{
+                nums1[k--] = nums1[i--];
+
+            }
+        }
+        
+        while(j >= 0){
+            nums1[k--] = nums2[j--];
+        }
+    }
+}
