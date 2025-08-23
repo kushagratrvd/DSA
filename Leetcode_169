@@ -1,0 +1,49 @@
+Date: 23/08/25, kal raat me kar rha tha, hashmap se krke so gya, subah 8:57, pe chatgpt kiya dosra solution, phir leetcode pe ek aur recursive approach dekha
+
+hashmap:
+class Solution {
+    public int majorityElement(int[] nums) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0; i<nums.length; i++){
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+            if(map.get(nums[i]) > nums.length/2) return nums[i];
+        }
+        return 1;
+    }
+}
+
+second solution:
+class Solution {
+    public int majorityElement(int[] nums) {
+        int candidate = 0;
+        int count = 0;
+        for(int i=0; i<nums.length; i++){
+            if(count == 0){
+                candidate = nums[i];
+                count++;
+            }
+            else{
+                if(nums[i] == candidate) count++;
+                else count--;
+            }
+        }
+        return candidate;
+    }
+}
+
+3rd solution:
+class Solution {
+    public static int majorityElement(int[] nums) {
+        return helper(nums,0,nums[0]);
+    }static int helper(int[] nums, int si, int ref){
+        int c=0;
+        for(int i=si;i<nums.length;i++){
+            if(nums[i]==ref)
+                c++;
+            else
+                c--;
+            if(c==0)
+                return helper(nums,i,nums[i]);
+        }return ref;
+    }
+}
