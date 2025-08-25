@@ -1,0 +1,48 @@
+i was solving this after a long time, and i understood the logic of doing it with stack, and then i knew that fast and slow can be used but the actual logic wasnt clear, so 
+after thinking for a while i thought about reversing the whole list and making new copy and then traversing both lists at the same time, and then i thought about reversing half of list will also work,
+and that slow will stop at mid, so thats what i did, i also looked at the solution before coding so it was a bit medium level ig
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if(head == null || head.next == null) return true;
+        if(head.next.next == null){
+            if(head.val == head.next.val) return true;
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        if (fast != null) slow = slow.next;
+        //ListNode temp = slow;
+        ListNode prev = null;
+        ListNode curr = slow;
+        while(curr != null){
+            ListNode front = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = front;
+        }
+        ListNode first = head;
+        ListNode last = prev;
+        while(first != null && last != null){
+            if(first.val != last.val) return false;
+            first = first.next;
+            last = last.next;
+        }
+        return true;
+    }
+}
