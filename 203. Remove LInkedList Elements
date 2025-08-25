@@ -1,0 +1,90 @@
+problem was simple but edge cases took some time, first submission took 29 mins, and then when i looked at a solution, i saw a simpler approach so i simplified a bit of code,
+which took another 14 mins.
+At first when i found a node.val == val then i was using while loop to iterate for as long as condition matches, but in this case to handle edge case was a bit complex, so i simplified the logic to just use an if condition
+and then one edge case in which the first element was left unchecked bcz temp always used to skip the first element, so it was handled at the end of loop
+
+this was first submission:
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if(head == null) return head;
+        if(head.next == null){
+            if(head.val == val) return null;
+            else return head;
+        }
+        ListNode temp = head;
+        while(temp != null){
+            ListNode prev = temp;
+            temp = temp.next;
+            while(temp != null && temp.val == val){
+                prev.next = temp.next;
+                temp.next = null;
+                temp = prev.next;
+            }
+            if(prev.val == val) head = head.next; 
+        }
+        return head;
+    }
+}
+
+then second submission:
+
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if(head == null) return head;
+        if(head.next == null){
+            if(head.val == val) return null;
+            else return head;
+        }
+        ListNode temp = head.next;
+        ListNode prev = head;
+        while(temp != null){
+            if(temp.val == val){
+                prev.next = temp.next;
+                temp = prev.next;
+            }
+            else{
+                prev = temp;
+                temp = temp.next;
+            }          
+        }
+        if(head.val == val) return head.next;
+        return head;
+    }
+}, 
+
+earlier in november 2024, i copied a solution:
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummy = new ListNode(0, head);
+        ListNode current = dummy;
+
+        while (current.next != null) {
+            if (current.next.val == val) {
+                current.next = current.next.next;
+            } else {
+                current = current.next;
+            }
+        }
+        return dummy.next;
+    }
+}
